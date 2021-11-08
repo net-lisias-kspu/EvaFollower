@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+	This file is part of EVA Follower /L Unleashed
+		© 2021 Lisias T : http://lisias.net <support@lisias.net>
+		© 2014-2016 Marijn Stevens (MSD)
+		© 2013 Fel
+
+	EVA Follower /L Unleashed is licensed as follows:
+		* CC-BY-NC-SA 3.0 : https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	EVA Follower /L Unleashed is distributed in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+*/
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -34,7 +48,7 @@ namespace EvaFollower
         
         public void Start()
         {
-            EvaDebug.DebugWarning("EvaOrderController.Start()");
+            Log.trace("EvaOrderController.Start()");
 
             //save config.
             //EvaSettings.SaveConfiguration();
@@ -49,7 +63,7 @@ namespace EvaFollower
         }
         public void OnDestroy()
         {
-            EvaDebug.DebugWarning("EvaOrderController.OnDestroy()");
+            Log.trace("EvaOrderController.OnDestroy()");
         }
 
         private void InitializeCursor()
@@ -516,7 +530,7 @@ namespace EvaFollower
                                 setLine(position, offset);
                             }
 
-                            EvaDebug.DebugLog(string.Format("Target: {0}", position));
+                            Log.detail("Target: {0}", position);
 
                             item.Order(position, offset);
                             item.Selected = false;
@@ -546,7 +560,7 @@ namespace EvaFollower
             }
             catch (Exception exp)
             {
-                EvaDebug.DebugWarning("[EFX] EvaOrderController: " + exp.Message);
+                Log.err("EvaOrderController: {0}", exp.Message);
             }
         }
 

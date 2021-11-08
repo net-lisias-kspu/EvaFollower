@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+	This file is part of EVA Follower /L Unleashed
+		© 2021 Lisias T : http://lisias.net <support@lisias.net>
+		© 2014-2016 Marijn Stevens (MSD)
+		© 2013 Fel
+
+	EVA Follower /L Unleashed is licensed as follows:
+		* CC-BY-NC-SA 3.0 : https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	EVA Follower /L Unleashed is distributed in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+*/
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -56,41 +70,6 @@ namespace EvaFollower
           public class EvaDebug : MonoBehaviour
         {
 #endif
-        //Debug log yes/no
-        private static bool debugLogActive = true;
-        
-        public static void DebugLog(string text)
-        {
-            if (debugLogActive)
-            {
-                Debug.Log("[EFX] " + text);
-            }
-        }
-
-        public static void DebugLog(string text, UnityEngine.Object context)
-        {
-            if (debugLogActive)
-            {
-                Debug.Log("[EFX] " + text, context);
-            }
-        }
-
-        public static void DebugWarning(string text)
-        {
-            if (debugLogActive)
-            {
-                Debug.LogWarning("[EFX] " + text);
-            }
-        }
-
-        public static void DebugError(string text)
-        {
-            if (debugLogActive)
-            {
-                Debug.LogError("[EFX] " + text);
-            }
-        }
-
 
         public static void ProfileStart()
         {
@@ -100,7 +79,7 @@ namespace EvaFollower
         public static void ProfileEnd(string name)
         {
             EndTimer();
-            EvaDebug.DebugWarning(string.Format("Profile: {0}: {1}ms", name, Elapsed));
+            Log.trace("Profile: {0}: {1}ms", name, Elapsed);
         }
 
         public static float Elapsed = 0;

@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+	This file is part of EVA Follower /L Unleashed
+		© 2021 Lisias T : http://lisias.net <support@lisias.net>
+		© 2014-2016 Marijn Stevens (MSD)
+		© 2013 Fel
+
+	EVA Follower /L Unleashed is licensed as follows:
+		* CC-BY-NC-SA 3.0 : https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	EVA Follower /L Unleashed is distributed in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+*/
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -125,12 +139,12 @@ namespace EvaFollower
             EvaModule module = (EvaModule)eva.GetComponent(typeof(EvaModule));
             module.Load(this);
 
-            EvaDebug.DebugWarning("EvaContainer.Load("+eva.name+")");
+            Log.trace("EvaContainer.Load({0})", eva.name);
         }
 
         public void Unload()
         {
-            EvaDebug.DebugWarning("EvaContainer.Unload(" + eva.name + ")");
+            Log.trace("EvaContainer.Unload({0})", eva.name);
             loaded = false;
         }
 
@@ -174,10 +188,10 @@ namespace EvaFollower
                 this.order.FromSave(order);
 				this.wanderer.FromSave(wanderer);
 
-                EvaDebug.DebugLog("Loaded: " + mode);
-                EvaDebug.DebugLog("name: " + sName);
-                EvaDebug.DebugLog("status: " + status);
-                EvaDebug.DebugLog("selected: " + selected);
+                Log.detail("Loaded: {0}", mode);
+                Log.detail("name: {0}", sName);
+                Log.detail("status: {0}", status);
+                Log.detail("selected: {0}", selected);
 
                 if (this.showHelmet == false)
                 {

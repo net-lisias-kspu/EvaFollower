@@ -78,6 +78,13 @@
     <Compile Include="ControlTypes\EvaWanderer.cs" />
     <Compile Include="Detection\DeadSpaceDetection.cs" />
     <Compile Include="Detection\IDetection.cs" />
+    <Compile Include="Properties\LegalMamboJambo.cs" />
+    <Compile Include="Properties\Version.cs">
+      <DependentUpon>Version.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Startup.cs" />
+    <Compile Include="ModuleManagerSupport.cs" />
+    <Compile Include="Log.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -93,5 +100,11 @@
   -->
   <ItemGroup>
     <Folder Include="Detection\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Version.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Version.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>

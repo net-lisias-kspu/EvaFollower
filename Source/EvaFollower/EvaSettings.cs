@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+	This file is part of EVA Follower /L Unleashed
+		© 2021 Lisias T : http://lisias.net <support@lisias.net>
+		© 2014-2016 Marijn Stevens (MSD)
+		© 2013 Fel
+
+	EVA Follower /L Unleashed is licensed as follows:
+		* CC-BY-NC-SA 3.0 : https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	EVA Follower /L Unleashed is distributed in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,9 +71,9 @@ namespace EvaFollower
                             }
                         }
                     }
-                    catch
+                    catch (Exception e)
                     {
-                       EvaDebug.DebugWarning("[EFX] Config loading error ");
+                       Log.err("Config loading error {0}", e.Message);
                     }
                 }
                 displayDebugLines = displayDebugLinesSetting;
@@ -91,7 +105,7 @@ namespace EvaFollower
 
         public static void Load()
         {
-            EvaDebug.DebugWarning("OnLoad()");
+            Log.trace("OnLoad()");
 			if (displayLoadingKerbals) {
 				ScreenMessages.PostScreenMessage ("Loading Kerbals...", 3, ScreenMessageStyle.LOWER_CENTER);
 			}
@@ -111,7 +125,7 @@ namespace EvaFollower
         {
             if (isLoaded)
             {
-                EvaDebug.DebugWarning("OnSave()");
+                Log.trace("OnSave()");
 
 				if (displayLoadingKerbals) {
 					ScreenMessages.PostScreenMessage ("Saving Kerbals...", 3, ScreenMessageStyle.LOWER_CENTER);
@@ -132,16 +146,16 @@ namespace EvaFollower
 
         public static void LoadEva(EvaContainer container)
         {
-
-            EvaDebug.DebugWarning("EvaSettings.LoadEva(" + container.Name + ")");
+            Log.trace("EvaSettings.LoadEva({0})", container.Name);
 
             //The eva was already has a old save.
             //Load it.
             if (collection.ContainsKey(container.flightID))
             {
-                //string evaString = collection[container.flightID];
-                //EvaDebug.DebugWarning(evaString);
-
+#if DEBUG
+                string evaString = collection[container.flightID];
+                Log.dbg(evaString);
+#endif
                 container.FromSave(collection[container.flightID]);
             }
             else
@@ -151,7 +165,7 @@ namespace EvaFollower
         }
         public static void SaveEva(EvaContainer container){
 
-            EvaDebug.DebugWarning("EvaSettings.SaveEva(" + container.Name + ")");
+            Log.trace("EvaSettings.SaveEva({0})", container.Name);
 
             if (container.status == Status.Removed)
             {
@@ -188,7 +202,7 @@ namespace EvaFollower
 
                 EvaTokenReader reader = new EvaTokenReader(file);
 
-                EvaDebug.DebugLog("Size KeySize: " + collection.Count);
+                Log.detail("Size KeySize: {0}", collection.Count);
 
                 //read every eva.
                 while (!reader.EOF)

@@ -12,15 +12,16 @@
 	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 */
-using System;
 using System.Collections.Generic;
 
 namespace EvaFollower
 {
-	interface IDetection
+	public static class ModuleManagerSupport
 	{
-		void UpdateMap (List<EvaContainer> collection);
-		void Debug();
+		public static IEnumerable<string> ModuleManagerAddToModList()
+		{
+			string[] r = { typeof(ModuleManagerSupport).Namespace };
+			return r;
+		}
 	}
 }
-

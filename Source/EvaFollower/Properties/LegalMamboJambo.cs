@@ -13,14 +13,13 @@
 
 */
 using System;
-using System.Collections.Generic;
-
 namespace EvaFollower
 {
-	interface IDetection
+	public static class LegalMamboJambo
 	{
-		void UpdateMap (List<EvaContainer> collection);
-		void Debug();
+		public const string Company = "/L Aerospace KSP Division";
+		public const string Copyright = "© 2018-2021 LisiasT";
+		public const string Product = "EvaFollower";
+		public const string Trademark = "EvaFollower™ by Sir Fel, MSD; /L Unleashed™ by LisiasT";
 	}
 }
-

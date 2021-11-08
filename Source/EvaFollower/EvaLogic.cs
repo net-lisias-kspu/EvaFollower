@@ -1,4 +1,18 @@
-﻿using UnityEngine;
+﻿/*
+	This file is part of EVA Follower /L Unleashed
+		© 2021 Lisias T : http://lisias.net <support@lisias.net>
+		© 2014-2016 Marijn Stevens (MSD)
+		© 2013 Fel
+
+	EVA Follower /L Unleashed is licensed as follows:
+		* CC-BY-NC-SA 3.0 : https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	EVA Follower /L Unleashed is distributed in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+*/
+using UnityEngine;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -17,12 +31,12 @@ namespace EvaFollower
 
         public void Start()
         {
-            EvaDebug.DebugWarning("EvaLogic.Start()");
+            Log.trace("EvaLogic.Start()");
 
         }
         public void OnDestroy()
         {
-            EvaDebug.DebugWarning("EvaLogic.OnDestroy()");
+            Log.trace("EvaLogic.OnDestroy()");
         }
 
 		public void FixedUpdate(){
@@ -58,7 +72,7 @@ namespace EvaFollower
                     if (eva == null)
                     {
                         //is this possible ?
-                        EvaDebug.DebugWarning("eva == null");
+                        Log.warn("eva == null");
                         continue;
                     }
 
@@ -145,7 +159,7 @@ namespace EvaFollower
             }
             catch (Exception exp)
             {
-                EvaDebug.DebugWarning("[EFX] EvaLogic: " + exp.Message + ":" + exp.ToString());
+                Log.err("[EFX] EvaLogic: {0} : {1}", exp.Message, exp);
             }
         }
     }

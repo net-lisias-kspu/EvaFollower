@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+	This file is part of EVA Follower /L Unleashed
+		© 2021 Lisias T : http://lisias.net <support@lisias.net>
+		© 2014-2016 Marijn Stevens (MSD)
+		© 2013 Fel
+
+	EVA Follower /L Unleashed is licensed as follows:
+		* CC-BY-NC-SA 3.0 : https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	EVA Follower /L Unleashed is distributed in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+*/
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -177,20 +191,20 @@ namespace EvaFollower
 			currentContainer.StartWanderer();
 		}
 
-        /*
+#if DEBUG
         [KSPEvent(guiActive = true, guiName = "Debug", active = true, guiActiveUnfocused = true, unfocusedRange = 8)]
         public void Debug()
         {
-            foreach (var item in EvaController.fetch.collection)
+            foreach (var item in EvaController.instance.collection)
             {
-                EvaDebug.DebugLog("Item: " + item.flightID);
-                EvaDebug.DebugLog("leader: " + item.formation.GetLeader());
-                EvaDebug.DebugLog("patrol: " + item.patrol.ToString());
-                EvaDebug.DebugLog("order: " + item.order.ToString());
-                EvaDebug.DebugLog("patrol: " + item.patrol);
+                Log.detail("Item: {0}", item.flightID);
+                Log.detail("leader: {0}", item.formation.GetLeader());
+                Log.detail("patrol: {0}", item.patrol.ToString());
+                Log.detail("order: {0}", item.order.ToString());
+                Log.detail("patrol: {0}", item.patrol);
             }
 
-            currentContainer.EVA.headLamp.light.intensity += 100;
+            currentContainer.EVA.headLamp.SetActive(true); // It was light.intensity += 100;
         }
 
 
@@ -206,7 +220,7 @@ namespace EvaFollower
         {
             EvaSettings.LoadFunction();
         }
-        */
+#endif
 
     }
 }

@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+	This file is part of EVA Follower /L Unleashed
+		© 2021 Lisias T : http://lisias.net <support@lisias.net>
+		© 2014-2016 Marijn Stevens (MSD)
+		© 2013 Fel
+
+	EVA Follower /L Unleashed is licensed as follows:
+		* CC-BY-NC-SA 3.0 : https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	EVA Follower /L Unleashed is distributed in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+*/
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +29,7 @@ namespace EvaFollower
         public void Start()
         {
 
-            EvaDebug.DebugWarning("EvaController.Start()");
+            Log.trace("EvaController.Start()");
             //initialize the singleton.
             instance = this;
                      
@@ -33,7 +47,7 @@ namespace EvaFollower
 
         public void OnDestroy()
         {
-            EvaDebug.DebugWarning("EvaController.OnDestroy()");
+            Log.trace("EvaController.OnDestroy()");
         
             
             GameEvents.onPartPack.Remove(OnPartPack);
@@ -54,7 +68,7 @@ namespace EvaFollower
         private void onFlightReadyCallback()
         {
             //Load the eva list.
-            EvaDebug.DebugLog("onFlightReadyCallback()");
+            Log.trace("onFlightReadyCallback()");
             EvaSettings.Load();
         }
 
@@ -75,7 +89,7 @@ namespace EvaFollower
             if (part.vessel.isEVA)
             {
                //save before pack
-                EvaDebug.DebugWarning("Pack: " + part.vessel.name);
+                Log.detail("Pack: {0}", part.vessel.name);
                                 
                 Unload(part.vessel, false);
             }
@@ -86,7 +100,7 @@ namespace EvaFollower
             if (part.vessel.isEVA)
             {               
                 //save before pack
-                EvaDebug.DebugWarning("Unpack: " + part.vessel.name);
+                Log.detail("Unpack: {0}", part.vessel.name);
 
                 Load(part.vessel);
             }
@@ -99,7 +113,7 @@ namespace EvaFollower
         public void OnCrewOnEva(GameEvents.FromToAction<Part, Part> e)
         {
             //add new kerbal
-            EvaDebug.DebugLog("OnCrewOnEva()");
+            Log.trace("OnCrewOnEva()");
             Load(e.to.vessel);
         }
 
@@ -110,7 +124,7 @@ namespace EvaFollower
         public void OnCrewBoardVessel(GameEvents.FromToAction<Part, Part> e)
         {
             //remove kerbal
-            EvaDebug.DebugLog("OnCrewBoardVessel()");
+            Log.trace("OnCrewBoardVessel()");
             Unload(e.from.vessel, true);
         }
 
@@ -121,7 +135,7 @@ namespace EvaFollower
 /*
         public void OnCrewKilled(EventReport report)
         {
-            EvaDebug.DebugLog("OnCrewKilled()");
+            Log.trace("OnCrewKilled()");
 		KerbalRoster boboo = new KerbalRoster(Game.Modes.SANDBOX);	
 		print(boboo[report.sender].name);
 		//MonoBehaviour.print(report.origin);
@@ -130,7 +144,7 @@ namespace EvaFollower
         }
 */
         public void VesselDestroyed(Vessel report) {
-            EvaDebug.DebugLog("VesselDestroyed()");
+            Log.trace("VesselDestroyed()");
 		if (report.isEVA) Unload(report, true);
         }
 
@@ -138,7 +152,7 @@ namespace EvaFollower
         {
             if (!vessel.isEVA)
             {
-                EvaDebug.DebugWarning("Tried loading a non eva.");
+                Log.warn("Tried loading a non eva.");
                 return;
             }
 
@@ -168,11 +182,11 @@ namespace EvaFollower
         {
             if (!vessel.isEVA)
             {
-                EvaDebug.DebugWarning("Tried unloading a non eva.");
+                Log.warn("Tried unloading a non eva.");
                 return;
             }
 
-            EvaDebug.DebugLog("Unload(" + vessel.name + ")");
+            Log.trace("Unload({0}", vessel.name);
 
             foreach (var item in collection)
             {
@@ -188,7 +202,7 @@ namespace EvaFollower
                     EvaSettings.SaveEva(item);
 
 
-                    EvaDebug.DebugLog("Remove EVA: (" + vessel.name + ")");
+                    Log.trace("Remove EVA: ({0})", vessel.name);
                     collection.Remove(item);
                     break;
                 }
@@ -197,7 +211,7 @@ namespace EvaFollower
 
         internal bool Contains(Guid id)
         {
-            EvaDebug.DebugLog("Contains()");
+            Log.trace("Contains()");
 
             for (int i = 0; i < collection.Count; i++)
             {
