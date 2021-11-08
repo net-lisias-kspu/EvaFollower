@@ -136,7 +136,7 @@ namespace EvaFollower
                 CreateLine(container);
             }
 
-            var lineRenderer = selectionLines[container.flightID];
+            LineRenderer lineRenderer = selectionLines[container.flightID];
             SetSelectionLineProperties(container.EVA, lineRenderer);            
         }
 
@@ -148,9 +148,9 @@ namespace EvaFollower
         private void SetSelectionLineProperties(KerbalEVA eva, LineRenderer lineRenderer)
         {
             double v = 1.5 + Math.Sin(angle) * 0.25;
-            var p = eva.transform.position;
-            var r = eva.transform.rotation;
-            var f = eva.transform.forward;
+            Vector3 p = eva.transform.position;
+            Quaternion r = eva.transform.rotation;
+            Vector3 f = eva.transform.forward;
 
             lineRenderer.transform.localScale = new Vector3((float)v, (float)v, (float)v);
             lineRenderer.transform.rotation = r * Quaternion.Euler(0,(float)(angle*60.0),0);;
@@ -263,8 +263,8 @@ namespace EvaFollower
         {
             if (gameUIToggle)
             {
-				var visibleBox = _selection.width != 0 && _selection.height != 0;
-				var noWindow = GUIUtility.hotControl == 0;
+                bool visibleBox = _selection.width != 0 && _selection.height != 0;
+                bool noWindow = GUIUtility.hotControl == 0;
 					
 				if (_startClick != -Vector3.one && visibleBox && noWindow)
                 {
@@ -422,10 +422,10 @@ namespace EvaFollower
                                 if (!vessel.loaded)
                                     return;
 
-								var camera = GetComponent<Camera>();
+                                Camera camera = GetComponent<Camera>();
 
                                 //Calculate distance.
-                                var distance = Mathf.Abs(
+                                float distance = Mathf.Abs(
 									Vector3.Distance(vessel.GetWorldPos3D(), camera.transform.position));
 
                                 if (target == null)
@@ -482,7 +482,7 @@ namespace EvaFollower
                     return; //nothing to check.
                 }
 
-                var evaCollision = hitInfo.transform.gameObject.GetComponent<KerbalEVA>();
+                KerbalEVA evaCollision = hitInfo.transform.gameObject.GetComponent<KerbalEVA>();
 
                 if (leftButton)
                 {
@@ -510,10 +510,10 @@ namespace EvaFollower
                 if (rightButton) //Middle button.
                 {
 
-                    var offset = (FlightGlobals.ActiveVessel).GetWorldPos3D();
-                    var position = (Vector3d)hitInfo.point;
+                    Vector3d offset = (FlightGlobals.ActiveVessel).GetWorldPos3D();
+                    Vector3d position = (Vector3d)hitInfo.point;
 
-                    foreach (var item in EvaController.instance.collection.ToArray())
+                    foreach (EvaContainer item in EvaController.instance.collection.ToArray())
                     {
                         if (!item.Loaded)
                             return;

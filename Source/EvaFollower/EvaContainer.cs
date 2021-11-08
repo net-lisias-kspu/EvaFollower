@@ -288,7 +288,7 @@ namespace EvaFollower
         {
             if (mode == Mode.Follow)
             {
-				var target = formation.GetNextTarget();
+                Vector3d target = formation.GetNextTarget();
 
 				if (target == Vector2d.zero) {
 					mode = Mode.None;

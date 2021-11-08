@@ -35,7 +35,7 @@ namespace EvaFollower
             //raycast to the sun ?
             if (forceUpdate)
             {
-                var target = FlightGlobals.Bodies[0].transform;
+                Transform target = FlightGlobals.Bodies[0].transform;
                 RaycastHit hit;
                 if (Physics.Raycast(from.position, target.position, out hit))
                 {

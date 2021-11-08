@@ -64,17 +64,17 @@ namespace EvaFollower
 		private void GenerateNewPosition(){
 			Vector3d position = eva.vessel.CoMD;
 
-			//Vector3d eastUnit = eva.vessel.mainBody.getRFrmVel(position).normalized; //uses the rotation of the body's frame to determine "east"
-			//Vector3d upUnit = (eva.vessel - eva.vessel.mainBody.position).normalized;
-			//Vector3d northUnit = Vector3d.Cross(upUnit, eastUnit); //north = up cross east
+            //Vector3d eastUnit = eva.vessel.mainBody.getRFrmVel(position).normalized; //uses the rotation of the body's frame to determine "east"
+            //Vector3d upUnit = (eva.vessel - eva.vessel.mainBody.position).normalized;
+            //Vector3d northUnit = Vector3d.Cross(upUnit, eastUnit); //north = up cross east
 
-			var offset = new Vector3d (
+            Vector3d offset = new Vector3d (
 				(((random.NextDouble () * 2 ) - 1) * 100),	
 				0,	
 				(((random.NextDouble () * 2 ) - 1) * 100)
 			);
 
-			var str = Environment.NewLine + eva.vessel.transform.up.ToString ();
+            string str = Environment.NewLine + eva.vessel.transform.up.ToString ();
 			str += Environment.NewLine + eva.vessel.transform.forward.ToString ();
 			str += Environment.NewLine + eva.vessel.transform.right.ToString ();
 

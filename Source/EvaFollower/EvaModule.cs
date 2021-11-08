@@ -195,7 +195,7 @@ namespace EvaFollower
         [KSPEvent(guiActive = true, guiName = "Debug", active = true, guiActiveUnfocused = true, unfocusedRange = 8)]
         public void Debug()
         {
-            foreach (var item in EvaController.instance.collection)
+            foreach (EvaContainer item in EvaController.instance.collection)
             {
                 Log.detail("Item: {0}", item.flightID);
                 Log.detail("leader: {0}", item.formation.GetLeader());

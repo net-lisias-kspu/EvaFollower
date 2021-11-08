@@ -76,7 +76,7 @@ namespace EvaFollower
         {
             //Save the eva list.
             // Might be double.
-            foreach (var item in collection)
+            foreach (EvaContainer item in collection)
             {
                 EvaSettings.Instance.SaveEva(item);
             }
@@ -188,7 +188,7 @@ namespace EvaFollower
 
             Log.trace("Unload({0}", vessel.name);
 
-            foreach (var item in collection)
+            foreach (EvaContainer item in collection)
             {
                 if(item.flightID == vessel.id)
                 {

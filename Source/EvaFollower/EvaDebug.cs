@@ -39,9 +39,9 @@ namespace EvaFollower
              if (HighLogic.LoadedScene == GameScenes.FLIGHT)
              {
                  if (style == null)
-                 {	
-					var w = 600;
-					var h = 250;
+                 {
+                    int w = 600;
+                    int h = 250;
 
 					pos = new Rect(Screen.width - (20+w), 60, w, h);
 

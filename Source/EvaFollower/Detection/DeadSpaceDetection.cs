@@ -35,13 +35,13 @@ namespace EvaFollower
 
 		public void UpdateMap(List<EvaContainer> containers){
 
-			var str = "";
+			string str = "";
 
-			foreach (var container in containers) {
+			foreach (EvaContainer container in containers) {
 				Rigidbody body = null;
 				container.EVA.GetComponentCached<Rigidbody> (ref body);
 
-				foreach (var collision in GetComponents(body.position, 1)) {
+				foreach (Collider collision in GetComponents(body.position, 1)) {
 					str += collision.gameObject.name + Environment.NewLine;
 				}
 			}

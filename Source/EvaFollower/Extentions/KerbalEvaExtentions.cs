@@ -33,7 +33,7 @@ namespace EvaFollower
         {             
             foreach (Renderer renderer in eva.GetComponentsInChildren<Renderer>())
             {
-                var smr = renderer as SkinnedMeshRenderer;
+                SkinnedMeshRenderer smr = renderer as SkinnedMeshRenderer;
 
                 if (smr != null)
                 {
@@ -71,7 +71,7 @@ namespace EvaFollower
         {
             try
             {
-                foreach (var item in eva.fsm.CurrentState.StateEvents)
+                foreach (KFSMEvent item in eva.fsm.CurrentState.StateEvents)
                 {
                     if (item.name == "Jump Start")
                     {
@@ -90,7 +90,7 @@ namespace EvaFollower
         {
             try
             {
-                foreach (var item in eva.fsm.CurrentState.StateEvents)
+                foreach (KFSMEvent item in eva.fsm.CurrentState.StateEvents)
                 {
                     if (item.name == "Ladder Grab Start")
                     {
@@ -109,7 +109,7 @@ namespace EvaFollower
         {
             try
             {
-                foreach (var item in eva.fsm.CurrentState.StateEvents)
+                foreach (KFSMEvent item in eva.fsm.CurrentState.StateEvents)
                 {
                     if (item.name == "Ladder Let Go")
                     {
@@ -128,7 +128,7 @@ namespace EvaFollower
         {
             try
             {
-                foreach (var item in eva.fsm.CurrentState.StateEvents)
+                foreach (KFSMEvent item in eva.fsm.CurrentState.StateEvents)
                 {
                     if (item.name == "Pack Toggle")
                     {
@@ -225,9 +225,9 @@ namespace EvaFollower
         /// <param name="fear"></param>
         public static void FearFactor(this KerbalEVA eva, float fear)
         {
-            var expS = UnityEngine.Object.FindObjectsOfType<kerbalExpressionSystem>();
+            kerbalExpressionSystem[] expS = UnityEngine.Object.FindObjectsOfType<kerbalExpressionSystem>();
 
-            foreach (var item in expS)
+            foreach (kerbalExpressionSystem item in expS)
             {
                 if (item.kerbalEVA == eva)
                 {

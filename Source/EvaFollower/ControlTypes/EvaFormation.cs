@@ -36,9 +36,9 @@ namespace EvaFollower
             {
                 return Vector3d.zero;
             }
-            
+
             //get the leader. 
-            var target = leader.EVA.vessel.GetWorldPos3D();        
+            Vector3d target = leader.EVA.vessel.GetWorldPos3D();        
             
             //update move vector.
             return target;
