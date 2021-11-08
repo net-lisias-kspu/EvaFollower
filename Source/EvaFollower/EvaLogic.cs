@@ -52,8 +52,8 @@ namespace EvaFollower
                 return;
 
             // Replace this with a check to see if GUI is hidden
-            if (Input.GetKeyDown(KeyCode.F2) && EvaSettings.displayDebugLinesSetting) {
-                EvaSettings.displayDebugLines = !EvaSettings.displayDebugLines;
+            if (Input.GetKeyDown(KeyCode.F2) && EvaSettings.Instance.displayDebugLinesSetting) {
+                EvaSettings.Instance.displayDebugLines = !EvaSettings.Instance.displayDebugLines;
                 foreach (EvaContainer container in EvaController.instance.collection) {
                     container.togglePatrolLines();
                 }

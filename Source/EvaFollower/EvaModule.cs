@@ -211,14 +211,14 @@ namespace EvaFollower
         [KSPEvent(guiActive = true, guiName = "Save", active = true, guiActiveUnfocused = true, unfocusedRange = 8)]
         public void ClearSave()
         {
-            EvaSettings.SaveFunction();
+            EvaSettings.Instance.SaveFunction();
         }
 
 
         [KSPEvent(guiActive = true, guiName = "Load", active = true, guiActiveUnfocused = true, unfocusedRange = 8)]
         public void Load()
         {
-            EvaSettings.LoadFunction();
+            EvaSettings.Instance.LoadFunction();
         }
 #endif
 

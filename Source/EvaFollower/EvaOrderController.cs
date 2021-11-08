@@ -52,9 +52,9 @@ namespace EvaFollower
 
             //save config.
             //EvaSettings.SaveConfiguration();
-            EvaSettings.LoadConfiguration();
+            EvaSettings.Instance.LoadConfiguration();
 
-            if (EvaSettings.displayDebugLines)
+            if (EvaSettings.Instance.displayDebugLines)
             {
                 InitializeDebugLine();
             }
@@ -64,6 +64,7 @@ namespace EvaFollower
         public void OnDestroy()
         {
             Log.trace("EvaOrderController.OnDestroy()");
+            EvaSettings.Instance.Destroy();
         }
 
         private void InitializeCursor()
@@ -338,13 +339,13 @@ namespace EvaFollower
 
                 #region Select Multiple Kerbals
 
-                if (Input.GetMouseButtonDown(EvaSettings.selectMouseButton)
-                    || Input.GetKeyDown(EvaSettings.selectKeyButton))
+                if (Input.GetMouseButtonDown(EvaSettings.Instance.selectMouseButton)
+                    || Input.GetKeyDown(EvaSettings.Instance.selectKeyButton))
                 {
                     _startClick = Input.mousePosition;
                 }
-                else if (Input.GetMouseButtonUp(EvaSettings.selectMouseButton)
-                    || Input.GetKeyUp(EvaSettings.selectKeyButton))
+                else if (Input.GetMouseButtonUp(EvaSettings.Instance.selectMouseButton)
+                    || Input.GetKeyUp(EvaSettings.Instance.selectKeyButton))
                 {
                     if (_selection.width < 0)
                     {
@@ -360,15 +361,15 @@ namespace EvaFollower
                     _startClick = -Vector3.one;
                 }
 
-                if (Input.GetMouseButton(EvaSettings.selectMouseButton) 
-                    || Input.GetKey(EvaSettings.selectKeyButton))
+                if (Input.GetMouseButton(EvaSettings.Instance.selectMouseButton) 
+                    || Input.GetKey(EvaSettings.Instance.selectKeyButton))
                 {
                     _selection = new Rect(_startClick.x, InvertY(_startClick.y),
                         Input.mousePosition.x - _startClick.x, InvertY(Input.mousePosition.y) - InvertY(_startClick.y));
                 }
 
-                if (Input.GetMouseButton(EvaSettings.selectMouseButton)
-                    || Input.GetKey(EvaSettings.selectKeyButton))
+                if (Input.GetMouseButton(EvaSettings.Instance.selectMouseButton)
+                    || Input.GetKey(EvaSettings.Instance.selectKeyButton))
                 {
                     if (_selection.width != 0 && _selection.height != 0)
                     {
@@ -409,7 +410,7 @@ namespace EvaFollower
                     }
 
                     #region targetVesselBySelection
-                    if (EvaSettings.targetVesselBySelection)
+                    if (EvaSettings.Instance.targetVesselBySelection)
                     {
                         if (_selection.width != 0 && _selection.height != 0)
                         {
@@ -464,8 +465,8 @@ namespace EvaFollower
 
                 #region Select Single Kerbal
 
-                bool leftButton = Input.GetMouseButtonDown(EvaSettings.selectMouseButton) || Input.GetKeyDown(EvaSettings.selectKeyButton);
-                bool rightButton = Input.GetMouseButtonDown(EvaSettings.dispatchMouseButton) || Input.GetKeyDown(EvaSettings.dispatchKeyButton);
+                bool leftButton = Input.GetMouseButtonDown(EvaSettings.Instance.selectMouseButton) || Input.GetKeyDown(EvaSettings.Instance.selectKeyButton);
+                bool rightButton = Input.GetMouseButtonDown(EvaSettings.Instance.dispatchMouseButton) || Input.GetKeyDown(EvaSettings.Instance.dispatchKeyButton);
 
                 if (leftButton == false && rightButton == false)
                 {
@@ -525,7 +526,7 @@ namespace EvaFollower
                                 item.EndPatrol();
                             }
                             
-                            if (EvaSettings.displayDebugLines)
+                            if (EvaSettings.Instance.displayDebugLines)
                             {
                                 setLine(position, offset);
                             }

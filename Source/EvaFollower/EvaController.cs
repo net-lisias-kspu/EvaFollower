@@ -69,7 +69,7 @@ namespace EvaFollower
         {
             //Load the eva list.
             Log.trace("onFlightReadyCallback()");
-            EvaSettings.Load();
+            EvaSettings.Instance.Load();
         }
 
         public void OnSave(ConfigNode node)
@@ -78,10 +78,10 @@ namespace EvaFollower
             // Might be double.
             foreach (var item in collection)
             {
-                EvaSettings.SaveEva(item);
+                EvaSettings.Instance.SaveEva(item);
             }
 
-            EvaSettings.Save();
+            EvaSettings.Instance.Save();
         }
 
         public void OnPartPack(Part part)
@@ -164,7 +164,7 @@ namespace EvaFollower
 
                 //load the vessel here.
                 container.Load(currentEVA);
-                EvaSettings.LoadEva(container);
+                EvaSettings.Instance.LoadEva(container);
 
                 collection.Add(container);
             }
@@ -174,7 +174,7 @@ namespace EvaFollower
                 EvaContainer container = GetEva(vessel.id);
 
                 container.Load(currentEVA);
-                EvaSettings.LoadEva(container);
+                EvaSettings.Instance.LoadEva(container);
             }
         }
 
@@ -199,7 +199,7 @@ namespace EvaFollower
 
                     //unload the vessel here. 
                     item.Unload();
-                    EvaSettings.SaveEva(item);
+                    EvaSettings.Instance.SaveEva(item);
 
 
                     Log.trace("Remove EVA: ({0})", vessel.name);

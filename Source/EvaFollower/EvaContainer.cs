@@ -39,7 +39,7 @@ namespace EvaFollower
 		const float BoundSpeedMultiplier = 1.25f;
 
         public void togglePatrolLines() {
-			if (EvaSettings.displayDebugLines) {
+			if (EvaSettings.Instance.displayDebugLines) {
 				patrol.GenerateLine ();
 			} else {
 				patrol.Hide ();
@@ -80,7 +80,7 @@ namespace EvaFollower
 
         public bool CanTakeHelmetOff
         {
-            get { return (FlightGlobals.ActiveVessel.mainBody.bodyName == "Kerbin") && EvaSettings.displayToggleHelmet; }
+            get { return (FlightGlobals.ActiveVessel.mainBody.bodyName == "Kerbin") && EvaSettings.Instance.displayToggleHelmet; }
         }
 
         public KerbalEVA EVA

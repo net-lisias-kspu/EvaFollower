@@ -80,7 +80,7 @@ namespace EvaFollower
             Vector3d position = Util.GetWorldPos3DSave(vessel);
             actions.Add(new PatrolAction(PatrolActionType.Move, 0, position));
 
-            if(EvaSettings.displayDebugLines)
+            if(EvaSettings.Instance.displayDebugLines)
                 setLine(position);
 
         }
@@ -92,7 +92,7 @@ namespace EvaFollower
             Vector3d position = Util.GetWorldPos3DSave(vessel);
             actions.Add(new PatrolAction(PatrolActionType.Wait, 1, position));
 
-            if (EvaSettings.displayDebugLines)
+            if (EvaSettings.Instance.displayDebugLines)
                 setLine(position);
 
         }
@@ -112,7 +112,7 @@ namespace EvaFollower
             currentPatrolPoint = 0;
             actions.Clear();
 
-            if (EvaSettings.displayDebugLines)
+            if (EvaSettings.Instance.displayDebugLines)
                 lineRenderer.SetVertexCount(0);
 
         }
@@ -173,7 +173,7 @@ namespace EvaFollower
                     }
 
 
-                    if (EvaSettings.displayDebugLines)
+                    if (EvaSettings.Instance.displayDebugLines)
                         GenerateLine();
                 }
             }
@@ -206,7 +206,7 @@ namespace EvaFollower
 
         public EvaPatrol()
         {
-            if (EvaSettings.displayDebugLines)
+            if (EvaSettings.Instance.displayDebugLines)
             {
                 lineRenderer = new GameObject().AddComponent<LineRenderer>();
 

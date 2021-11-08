@@ -14,96 +14,80 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using UnityEngine;
+
+using KSPe;
+
+using Asset = KSPe.IO.Asset<EvaFollower.Startup>;
+using Savegame = KSPe.IO.Save<EvaFollower.Startup>;
+using File = KSPe.IO.File<EvaFollower.Startup>.Save;
+using SIO = System.IO;
 
 namespace EvaFollower
 {
     class EvaSettings
     {
-        internal static bool targetVesselBySelection = false;
-        internal static bool displayDebugLines = false;
-        internal static bool displayDebugLinesSetting = false;
-        internal static bool displayToggleHelmet = true;
-        internal static bool displayLoadingKerbals = true;
+        private static EvaSettings instance = null;
+        internal static EvaSettings Instance => instance ?? (instance = new EvaSettings());
 
-        internal static int selectMouseButton = 0;
-        internal static int dispatchMouseButton = 2;
+        internal bool targetVesselBySelection = false;
+        internal bool displayDebugLines = false;
+        internal bool displayDebugLinesSetting = false;
+        internal bool displayToggleHelmet = true;
+        internal bool displayLoadingKerbals = true;
 
-        internal static string selectKeyButton = "o";
-        internal static string dispatchKeyButton = "p";
+        internal int selectMouseButton = 0;
+        internal int dispatchMouseButton = 2;
+
+        internal string selectKeyButton = "o";
+        internal string dispatchKeyButton = "p";
 
 
-        private static Dictionary<Guid, string> collection = new Dictionary<Guid, string>();
+        private Dictionary<Guid, string> collection = new Dictionary<Guid, string>();
 
-        private static bool isLoaded = false;
+        private bool isLoaded = false;
 
-        public static void LoadConfiguration()
+		internal void Destroy()
+		{
+			instance = null;
+		}
+
+		private readonly Asset.ConfigNode DEFAULTS = Asset.ConfigNode.For("EvaFollower", "Config.cfg");
+        private readonly Savegame.ConfigNode SAVE = Savegame.ConfigNode.For("EvaFollower", "Config.cfg");
+        public void LoadConfiguration()
         {
-            if (FileExcist("Config.cfg"))
+            if (!SAVE.IsLoadable)
             {
-                KSP.IO.TextReader tr = KSP.IO.TextReader.CreateForType<EvaSettings>("Config.cfg");
-                string[] lines = tr.ReadToEnd().Split('\n');
-
-                foreach (var line in lines)
+                DEFAULTS.Load();
+                SAVE.Save(DEFAULTS.Node);
+            }
+            else
+            {
+                ConfigNodeWithSteroids cn = ConfigNodeWithSteroids.from(SAVE.Load().Node);
+                try
                 {
-                    string[] parts = line.Split('=');
-
-                    try
-                    {
-                        if (parts.Length > 1)
-                        {
-                            string name = parts[0].Trim();
-                            string value = parts[1].Trim();
-
-                            switch (name)
-                            {
-                                case "ShowDebugLines": { displayDebugLinesSetting = bool.Parse(value); } break;
-                                case "ShowLoadingKerbals": { displayLoadingKerbals = bool.Parse(value); } break;
-                                case "EnableHelmetToggle": { displayToggleHelmet = bool.Parse(value); } break;
-                                case "SelectMouseButton": { selectMouseButton = int.Parse(value); } break;
-                                case "DispatchMouseButton": { dispatchMouseButton = int.Parse(value); } break;
-                                case "SelectKey": { selectKeyButton = value; } break;
-                                case "DispatchKey": { dispatchKeyButton = value; } break;
-                                case "TargetVesselBySelection": { targetVesselBySelection = bool.Parse(value); } break;
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                       Log.err("Config loading error {0}", e.Message);
-                    }
+                    displayDebugLines = displayDebugLinesSetting
+                        = cn.GetValue<bool>("ShowDebugLines");
+                    displayLoadingKerbals = cn.GetValue<bool>("ShowLoadingKerbals");
+                    displayToggleHelmet = cn.GetValue<bool>("EnableHelmetToggle");
+                    selectMouseButton = cn.GetValue<int>("SelectMouseButton");
+                    dispatchMouseButton = cn.GetValue<int>("DispatchMouseButton");
+                    selectKeyButton = cn.GetValue<string>("SelectKey");
+                    dispatchKeyButton = cn.GetValue<string>("DispatchKey");
+                    targetVesselBySelection = cn.GetValue<bool>("TargetVesselBySelection");
                 }
-                displayDebugLines = displayDebugLinesSetting;
+                catch (Exception e)
+                {
+                    Log.err("Config loading error {0}", e.Message);
+                }
             }
         }
 
-        public static void SaveConfiguration()
+        public void SaveConfiguration()
         {
-            KSP.IO.TextWriter tr = KSP.IO.TextWriter.CreateForType<EvaSettings>("Config.cfg");
-            tr.Write("ShowDebugLines = false");
-            tr.Write("# 0 = left, 1 = right, 2 = middle mouse button.");
-            tr.Write("SelectMouseButton = 0");
-            tr.Write("DispatchMouseButton = 2");
-            tr.Write("# Lookup Unity Keybinding for different options");
-            tr.Write("# use lower case or eat exception sandwich. ");
-            tr.Write("SelectKey = o");
-            tr.Write("DispatchKey = p");
-            tr.Write("");
-            tr.Write("ShowLoadingKerbals = false");
-            tr.Write("EnableHelmetToggle = true");
-            tr.Close();
-
+            SAVE.Save();
         }
 
-        public static bool FileExcist(string name)
-        {
-           return KSP.IO.File.Exists<EvaSettings>(name);
-        }
-
-        public static void Load()
+        public void Load()
         {
             Log.trace("OnLoad()");
 			if (displayLoadingKerbals) {
@@ -113,7 +97,7 @@ namespace EvaFollower
             LoadFunction();
         }
 
-        public static void LoadFunction()
+        public void LoadFunction()
         {
             EvaDebug.ProfileStart();
             LoadFile();
@@ -121,7 +105,7 @@ namespace EvaFollower
             isLoaded = true;
         }
 
-        public static void Save()
+        public void Save()
         {
             if (isLoaded)
             {
@@ -137,14 +121,14 @@ namespace EvaFollower
             }
         }
 
-        public static void SaveFunction()
+        public void SaveFunction()
         {
             EvaDebug.ProfileStart();
             SaveFile();
             EvaDebug.ProfileEnd("EvaSettings.Save()");
         }
 
-        public static void LoadEva(EvaContainer container)
+        public void LoadEva(EvaContainer container)
         {
             Log.trace("EvaSettings.LoadEva({0})", container.Name);
 
@@ -163,7 +147,7 @@ namespace EvaFollower
                 //No save yet.
             }
         }
-        public static void SaveEva(EvaContainer container){
+        public void SaveEva(EvaContainer container){
 
             Log.trace("EvaSettings.SaveEva({0})", container.Name);
 
@@ -190,18 +174,16 @@ namespace EvaFollower
             }
         }
 
-        private static void LoadFile()
+        private const string EVA_FILENAME = "Evas.txt";
+        private void LoadFile()
         {
-            string fileName  = String.Format("Evas-{0}.txt", HighLogic.CurrentGame.Title);
-            if (FileExcist(fileName))
+            if (File.Exists(EVA_FILENAME))
             {
-                KSP.IO.TextReader tr = KSP.IO.TextReader.CreateForType<EvaSettings>(fileName);
-
+				SIO.TextReader tr = Savegame.StreamReader.CreateFor(EVA_FILENAME);
                 string file = tr.ReadToEnd();
                 tr.Close();
 
                 EvaTokenReader reader = new EvaTokenReader(file);
-
                 Log.detail("Size KeySize: {0}", collection.Count);
 
                 //read every eva.
@@ -213,7 +195,7 @@ namespace EvaFollower
             }
         }
 
-        private static void LoadEva(string eva)
+        private void LoadEva(string eva)
         {
             Guid flightID = GetFlightIDFromEvaString(eva);
             collection.Add(flightID, eva);
@@ -232,14 +214,12 @@ namespace EvaFollower
         }
 
 
-        private static void SaveFile()
+        private void SaveFile()
         {
-            KSP.IO.TextWriter tw = KSP.IO.TextWriter.CreateForType<EvaSettings>(String.Format("Evas-{0}.txt", HighLogic.CurrentGame.Title));
+			SIO.TextWriter tw = Savegame.StreamWriter.CreateFor(EVA_FILENAME);
 
-            foreach (var item in collection)
-            {
+            foreach (KeyValuePair<Guid, string> item in collection)
                 tw.Write("[" + item.Value + "]");
-            }
 
             tw.Close();
 
