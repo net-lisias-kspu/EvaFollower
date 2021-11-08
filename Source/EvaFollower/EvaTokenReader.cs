@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     /// <summary>
     /// Small parser for reading the EvaSetting's data.

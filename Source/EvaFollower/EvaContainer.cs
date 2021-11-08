@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     internal class EvaContainer
     {

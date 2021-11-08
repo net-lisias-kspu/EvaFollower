@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using SD = System.Diagnostics;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
 
 #if DEBUG

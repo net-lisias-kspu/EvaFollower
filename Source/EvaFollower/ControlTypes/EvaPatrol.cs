@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using System.Xml;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     /// <summary>
     /// The object responsible for Patroling the kerbal.

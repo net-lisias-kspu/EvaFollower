@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     /// <summary>
     /// The object responsible for Formations.

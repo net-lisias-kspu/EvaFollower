@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
 
     [KSPAddon(KSPAddon.Startup.Flight, false)]

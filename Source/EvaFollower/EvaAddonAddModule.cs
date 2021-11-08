@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     /// <summary>
     /// Add the module to all kerbals available. 

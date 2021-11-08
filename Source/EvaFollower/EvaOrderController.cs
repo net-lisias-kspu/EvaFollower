@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using System.Diagnostics;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     class EvaOrderController : MonoBehaviour

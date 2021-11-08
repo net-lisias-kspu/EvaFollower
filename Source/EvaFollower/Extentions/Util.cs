@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
   
     class Util

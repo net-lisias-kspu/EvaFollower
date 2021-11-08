@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using System;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     /// <summary>
     /// The object responsible for ordering the kerbal around. 

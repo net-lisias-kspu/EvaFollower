@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     static class KerbalEvaExtentions
     {

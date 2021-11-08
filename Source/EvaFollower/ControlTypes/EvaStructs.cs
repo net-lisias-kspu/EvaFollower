@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     /// <summary>
     /// The mode the EVA is in.

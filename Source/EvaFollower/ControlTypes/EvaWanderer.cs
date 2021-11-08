@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
 	public class EvaWanderer : IEvaControlType
 	{     

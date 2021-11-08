@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     /// <summary>
     /// Keep track of the Context Menu.

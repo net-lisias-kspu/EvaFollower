@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using UnityEngine;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     class EvaSettings
     {

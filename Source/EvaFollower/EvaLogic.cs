@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 
-namespace MSD.EvaFollower
+namespace EvaFollower
 {
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class EvaLogic : MonoBehaviour
