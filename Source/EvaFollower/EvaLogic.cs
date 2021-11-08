@@ -12,155 +12,146 @@
 	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 */
-using UnityEngine;
-using System.Diagnostics;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using KSPe.Annotations;
 
 namespace EvaFollower
 {
-    [KSPAddon(KSPAddon.Startup.Flight, false)]
-    public class EvaLogic : MonoBehaviour
-    {
-		//List<IDetection> detectionSystems = new List<IDetection>();
+	[KSPAddon(KSPAddon.Startup.Flight, false)]
+	public class EvaLogic:MonoBehaviour
+	{
+		List<IDetection> detectionSystems = new List<IDetection>();
 
-		public EvaLogic(){
-
-			//detectionSystems.Add (new DeadSpaceDetection ());
+		public EvaLogic() {
+			detectionSystems.Add (new DeadSpaceDetection ());
 		}
 
-        public void Start()
-        {
-            Log.trace("EvaLogic.Start()");
+		[UsedImplicitly]
+		private void Awake()
+		{
+			Log.trace("EvaLogic.Awake()");
+		}
 
-        }
-        public void OnDestroy()
-        {
-            Log.trace("EvaLogic.OnDestroy()");
-        }
+		[UsedImplicitly]
+		private void Start()
+		{
+			Log.trace("EvaLogic.Start()");
+			GameEvents.onShowUI.Add(this.OnShowUI);
+			GameEvents.onHideUI.Add(this.OnHideUI);
+			this.OnShowUI();
+		}
 
-		public void FixedUpdate(){
+		[UsedImplicitly]
+		private void OnDestroy()
+		{
+			Log.trace("EvaLogic.OnDestroy()");
+			GameEvents.onHideUI.Remove(this.OnHideUI);
+			GameEvents.onShowUI.Remove(this.OnShowUI);
+		}
+
+		internal void OnShowUI()
+		{
+			foreach (EvaContainer container in EvaController.instance.collection)
+				container.SetPatrolLinesVisible(true);
+		}
+
+		internal void OnHideUI()
+		{
+			foreach (EvaContainer container in EvaController.instance.collection)
+				container.SetPatrolLinesVisible(false);
+		}
+
+		[UsedImplicitly]
+		private void FixedUpdate()
+		{
 			// Update detection systems.
-			//foreach (var detection in detectionSystems) {
-			//	detection.UpdateMap (EvaController.instance.collection);
-			//}
+			//foreach (IDetection detection in this.detectionSystems)
+			//	detection.UpdateMap(EvaController.instance.collection);
 		}
 
-        public void Update()
-        {
-            if (!FlightGlobals.ready || PauseMenu.isOpen)
-                return;
-
-            // Replace this with a check to see if GUI is hidden
-            if (Input.GetKeyDown(KeyCode.F2) && EvaSettings.Instance.displayDebugLinesSetting) {
-                EvaSettings.Instance.displayDebugLines = !EvaSettings.Instance.displayDebugLines;
-                foreach (EvaContainer container in EvaController.instance.collection) {
-                    container.togglePatrolLines();
-                }
-            }
+		[UsedImplicitly]
+		private void Update()
+		{
+			if (!FlightGlobals.ready || PauseMenu.isOpen) return;
 
 			if (Input.GetKeyDown (KeyCode.B)) {
 				foreach (EvaContainer container in EvaController.instance.collection) {
 					container.EVA.PackToggle ();
 				}
 			}
-				
-            try
-            {
-                foreach (EvaContainer eva in EvaController.instance.collection.ToArray())
-                {
-                    if (eva == null)
-                    {
-                        //is this possible ?
-                        Log.warn("eva == null");
-                        continue;
-                    }
 
-                    //skip unloaded vessels
-                    if (!eva.Loaded)
-                    {
-                        continue;
-                    }
+			foreach (EvaContainer eva in EvaController.instance.collection.ToArray()) if (null != eva && Mode.None != eva.mode && eva.Loaded) try
+			{
+				//Recover from ragdoll, if possible.
+				if (eva.IsRagDoll)
+				{
+					eva.RecoverFromRagdoll();
+					continue;
+				}
 
-                    //Turn the lights on when dark.
-                    //Skip for now, too buggy..
-                    //eva.UpdateLamps();
+				Vector3d move = -eva.Position;
 
-                    if (eva.mode == Mode.None)
-                    {
-                        //Nothing to do here.
-                        continue;
-                    }
+				//Get next Action, Formation or Patrol
+				Vector3d target = eva.GetNextTarget();
 
-                    //Recover from ragdoll, if possible.
-                    if (eva.IsRagDoll)
-                    {
-                        eva.RecoverFromRagdoll();
-                        continue;
-                    }
+				// Path Finding
+				//todo: check if the target is occopied.
+				move += target;
 
-                    Vector3d move = -eva.Position;
+				double sqrDist = move.sqrMagnitude;
+				float speed = TimeWarp.deltaTime;
 
-                    //Get next Action, Formation or Patrol
-                    Vector3d target = eva.GetNextTarget();
+				if (eva.OnALadder)
+				{
+					eva.ReleaseLadder();
+				}
 
-                    // Path Finding
-                    //todo: check if the target is occopied.
-                    move += target;
+				#region Break Free Code
 
-                    double sqrDist = move.sqrMagnitude;
-                    float speed = TimeWarp.deltaTime;
+				if (eva.IsActive)
+				{
+					Mode mode = eva.mode;
 
-                    if (eva.OnALadder)
-                    {
-                        eva.ReleaseLadder();
-                    }
+					if (Input.GetKeyDown(KeyCode.W))
+						mode = EvaFollower.Mode.None;
+					if (Input.GetKeyDown(KeyCode.S))
+						mode = EvaFollower.Mode.None;
+					if (Input.GetKeyDown(KeyCode.A))
+						mode = EvaFollower.Mode.None;
+					if (Input.GetKeyDown(KeyCode.D))
+						mode = EvaFollower.Mode.None;
+					if (Input.GetKeyDown(KeyCode.Q))
+						mode = EvaFollower.Mode.None;
+					if (Input.GetKeyDown(KeyCode.E))
+						mode = EvaFollower.Mode.None;
 
-                    #region Break Free Code
+					if (mode == Mode.None)
+					{
+						//break free!
+						eva.mode = mode;
+						continue;
+					}
+				}
+				#endregion
 
-                    if (eva.IsActive)
-                    {
-                        Mode mode = eva.mode;
+				//Animation Logic
+				eva.UpdateAnimations(sqrDist, ref speed);
 
-                        if (Input.GetKeyDown(KeyCode.W))
-                            mode = EvaFollower.Mode.None;
-                        if (Input.GetKeyDown(KeyCode.S))
-                            mode = EvaFollower.Mode.None;
-                        if (Input.GetKeyDown(KeyCode.A))
-                            mode = EvaFollower.Mode.None;
-                        if (Input.GetKeyDown(KeyCode.D))
-                            mode = EvaFollower.Mode.None;
-                        if (Input.GetKeyDown(KeyCode.Q))
-                            mode = EvaFollower.Mode.None;
-                        if (Input.GetKeyDown(KeyCode.E))
-                            mode = EvaFollower.Mode.None;
+				move.Normalize();
 
-                        if (mode == Mode.None)
-                        {
-                            //break free!
-                            eva.mode = mode;
-                            continue;
-                        }
-                    }
-                    #endregion
+				//Distance Logic
+				eva.CheckDistance(move, speed, sqrDist);
 
-                    //Animation Logic
-                    eva.UpdateAnimations(sqrDist, ref speed);
+				//Reset Animation Mode Events
+				eva.CheckModeIsNone();
 
-                    move.Normalize();
-
-                    //Distance Logic
-                    eva.CheckDistance(move, speed, sqrDist);
-
-                    //Reset Animation Mode Events
-                    eva.CheckModeIsNone();
-
-                }
-            }
-            catch (Exception exp)
-            {
-                Log.err("[EFX] EvaLogic: {0} : {1}", exp.Message, exp);
-            }
-        }
-    }
+			}
+			catch (Exception exp)
+			{
+				Log.err("EvaLogic: {0} : {1}", exp.Message, exp);
+			}
+		}
+	}
 }

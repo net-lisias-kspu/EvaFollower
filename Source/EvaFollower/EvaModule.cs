@@ -12,9 +12,6 @@
 	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EvaFollower
 {
@@ -24,6 +21,8 @@ namespace EvaFollower
     class EvaModule : PartModule
     {
         private EvaContainer currentContainer;
+        private readonly bool IsNativeHelmetSupport = KSPe.Util.KSP.Version.Current >= KSPe.Util.KSP.Version.FindByVersion(1,6,0);
+        private readonly bool IsKisInstalled = KSPe.Util.SystemTools.TypeFinder.ExistsByQualifiedName("KISAPIv1.KISAPI");
 
         public void Update()
         {
@@ -68,9 +67,7 @@ namespace EvaFollower
             if (!currentContainer.Loaded)
                 return;
 
-			if (!currentContainer.EVA.vessel.Landed) {
-				return; 
-			}
+			if (!(currentContainer.EVA.vessel.Landed || currentContainer.EVA.vessel.Splashed)) return;
 
             if (currentContainer.mode == Mode.None)
             {
@@ -103,7 +100,7 @@ namespace EvaFollower
                 Events["Follow"].active = true;
             }
 
-            if (currentContainer.CanTakeHelmetOff)
+            if (!(this.IsNativeHelmetSupport || this.IsKisInstalled) && currentContainer.CanTakeHelmetOff)
             {
                 Events["ToggleHelmet"].active = true;
             }

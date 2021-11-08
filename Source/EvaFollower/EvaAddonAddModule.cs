@@ -16,36 +16,32 @@ using UnityEngine;
 
 namespace EvaFollower
 {
-    /// <summary>
-    /// Add the module to all kerbals available. 
-    /// </summary>
-    [KSPAddon(KSPAddon.Startup.SpaceCentre, true)]
-    class EvaAddonAddModule : MonoBehaviour
-    {
-        public void Awake()
-        {
-            Log.trace("Loaded AddonAddModule.");
+	/// <summary>
+	/// Add the module to all kerbals available. 
+	/// </summary>
+	[KSPAddon(KSPAddon.Startup.SpaceCentre, true)]
+	class EvaAddonAddModule:MonoBehaviour
+	{
+		private static string[] EVAS =
+		{
+			"kerbalEVA", "kerbalEVAfemale"
+			,"kerbalEVAVintage", "kerbalEVAfemaleVintage"
+			,"kerbalEVAFuture", "kerbalEVAFemaleFuture"
+			,"kerbalEVASlimSuit", "kerbalEVASlimSuitFemale"
+		};
 
-            ConfigNode EVA = new ConfigNode("MODULE");
-            EVA.AddValue("name", "EvaModule");
+		public void Awake()
+		{
+			Log.trace("Loaded AddonAddModule.");
 
-            try
-            {
-              PartLoader.getPartInfoByName("kerbalEVA").partPrefab.AddModule(EVA);
-            }
-            catch { 
-			
-			}
+			foreach (string partName in EVAS) try // There should be a better way, but for now let it go as it is.
+				{
+					ConfigNode EVA = new ConfigNode("MODULE");
+					EVA.AddValue("name", "EvaModule");
+					PartLoader.getPartInfoByName(partName).partPrefab.AddModule(EVA);
+				}
+				catch { } // Yuck. Empty try catches... :(
+		}
 
-			EVA = new ConfigNode("MODULE");
-            EVA.AddValue("name", "EvaModule");
-
-			try {
-				PartLoader.getPartInfoByName("kerbalEVAfemale").partPrefab.AddModule(EVA);
-			} catch {
-
-			}
-       	}
-
-    }
+	}
 }

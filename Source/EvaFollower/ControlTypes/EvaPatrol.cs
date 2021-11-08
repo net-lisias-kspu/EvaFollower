@@ -14,9 +14,7 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using System.Xml;
 
 namespace EvaFollower
 {
@@ -112,14 +110,15 @@ namespace EvaFollower
             currentPatrolPoint = 0;
             actions.Clear();
 
-            if (EvaSettings.Instance.displayDebugLines)
-                lineRenderer.SetVertexCount(0);
-
-        }
-        public void Hide() {
-            lineRenderer.SetVertexCount(0);
+			this.Hide();
         }
 
+		public void Hide()
+		{
+			if (null == lineRenderer) return;
+			lineRenderer.SetVertexCount(0);
+			lineRenderer.enabled = false;
+		}
 
 		public string ToSave()
         {
@@ -179,7 +178,7 @@ namespace EvaFollower
             }
             catch
             {
-                throw new Exception("[EFX] Patrol.FromSave Failed.");
+                throw new Exception("Patrol.FromSave Failed.");
             }
         }
 
@@ -189,10 +188,10 @@ namespace EvaFollower
             lineRenderer.SetVertexCount(actions.Count+1);
 
             for (int i = 0; i < actions.Count; i++)
-            {
                 lineRenderer.SetPosition(i, Util.GetWorldPos3DLoad(actions[i].position));
-            }
+
             lineRenderer.SetPosition(actions.Count, Util.GetWorldPos3DLoad(actions[0].position));
+            lineRenderer.enabled = true;
         }
 
 

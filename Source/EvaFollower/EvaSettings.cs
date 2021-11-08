@@ -105,23 +105,22 @@ namespace EvaFollower
             isLoaded = true;
         }
 
-        public void Save()
-        {
-            if (isLoaded)
-            {
-                Log.trace("OnSave()");
+		public void Save()
+		{
+			if (isLoaded)
+			{
+				Log.trace("OnSave()");
 
-				if (displayLoadingKerbals) {
-					ScreenMessages.PostScreenMessage ("Saving Kerbals...", 3, ScreenMessageStyle.LOWER_CENTER);
+				if (displayLoadingKerbals)
+				{
+					ScreenMessages.PostScreenMessage("Saving Kerbals...", 3, ScreenMessageStyle.LOWER_CENTER);
 				}
 
-                SaveFunction();
+				SaveFunction();
+			}
+		}
 
-                isLoaded = false;
-            }
-        }
-
-        public void SaveFunction()
+		public void SaveFunction()
         {
             EvaDebug.ProfileStart();
             SaveFile();
@@ -224,6 +223,7 @@ namespace EvaFollower
             tw.Close();
 
             collection.Clear();
+			this.isLoaded = false;
         }
     }
 }

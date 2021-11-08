@@ -12,8 +12,6 @@
 	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 */
-using System.Xml;
-using System;
 
 namespace EvaFollower
 {

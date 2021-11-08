@@ -25,47 +25,49 @@ namespace EvaFollower
         public static EvaController instance;
 		public string debug = "";
         public List<EvaContainer> collection = new List<EvaContainer>();
-        
-        public void Start()
-        {
 
-            Log.trace("EvaController.Start()");
-            //initialize the singleton.
-            instance = this;
-                     
-            GameEvents.onPartPack.Add(OnPartPack);
-            GameEvents.onPartUnpack.Add(OnPartUnpack);
-            
-            GameEvents.onCrewOnEva.Add(OnCrewOnEva);
-            GameEvents.onCrewBoardVessel.Add(OnCrewBoardVessel);
-//            GameEvents.onCrewKilled.Add(OnCrewKilled);
-            GameEvents.onVesselWillDestroy.Add(VesselDestroyed);
+		public void Start()
+		{
+			Log.trace("EvaController.Start()");
+			//initialize the singleton.
+			instance = this;
 
-            GameEvents.onGameStateSave.Add(OnSave);
-            GameEvents.onFlightReady.Add(onFlightReadyCallback);
-        }
+			GameEvents.onPartPack.Add(this.OnPartPack);
+			GameEvents.onPartUnpack.Add(this.OnPartUnpack);
 
-        public void OnDestroy()
-        {
-            Log.trace("EvaController.OnDestroy()");
-        
-            
-            GameEvents.onPartPack.Remove(OnPartPack);
-            GameEvents.onPartUnpack.Remove(OnPartUnpack);
-        
-            GameEvents.onCrewOnEva.Remove(OnCrewOnEva);
-            GameEvents.onCrewBoardVessel.Remove(OnCrewBoardVessel);
-//            GameEvents.onCrewKilled.Remove(OnCrewKilled);
-            GameEvents.onVesselWillDestroy.Add(VesselDestroyed);
+			GameEvents.onCrewOnEva.Add(this.OnCrewOnEva);
+			GameEvents.onCrewBoardVessel.Add(this.OnCrewBoardVessel);
+			GameEvents.onCrewKilled.Add(this.OnCrewKilled);
+			GameEvents.onCommandSeatInteraction.Add(this.OnCommandSeatInteraction);
 
-            GameEvents.onGameStateSave.Remove(OnSave);
-            GameEvents.onFlightReady.Remove(onFlightReadyCallback);
-        }
-           
-        /// <summary>
-        /// Load the list 
-        /// </summary>
-        private void onFlightReadyCallback()
+			GameEvents.onGameStateSave.Add(OnSave);
+			GameEvents.onFlightReady.Add(this.OnFlightReadyCallback);
+
+			GameEvents.onVesselWillDestroy.Add(this.VesselDestroyed);
+		}
+
+		public void OnDestroy()
+		{
+			Log.trace("EvaController.OnDestroy()");
+
+			GameEvents.onVesselWillDestroy.Add(this.VesselDestroyed);
+
+			GameEvents.onGameStateSave.Remove(this.OnSave);
+			GameEvents.onFlightReady.Remove(this.OnFlightReadyCallback);
+
+			GameEvents.onCommandSeatInteraction.Remove(this.OnCommandSeatInteraction);
+			GameEvents.onCrewKilled.Remove(this.OnCrewKilled);
+			GameEvents.onCrewBoardVessel.Remove(this.OnCrewBoardVessel);
+			GameEvents.onCrewOnEva.Remove(this.OnCrewOnEva);
+
+			GameEvents.onPartUnpack.Remove(this.OnPartUnpack);
+			GameEvents.onPartPack.Remove(this.OnPartPack);
+		}
+
+		/// <summary>
+		/// Load the list 
+		/// </summary>
+		private void OnFlightReadyCallback()
         {
             //Load the eva list.
             Log.trace("onFlightReadyCallback()");
@@ -90,7 +92,6 @@ namespace EvaFollower
             {
                //save before pack
                 Log.detail("Pack: {0}", part.vessel.name);
-                                
                 Unload(part.vessel, false);
             }
         }
@@ -98,7 +99,7 @@ namespace EvaFollower
         public void OnPartUnpack(Part part)
         {
             if (part.vessel.isEVA)
-            {               
+            {
                 //save before pack
                 Log.detail("Unpack: {0}", part.vessel.name);
 
@@ -128,25 +129,32 @@ namespace EvaFollower
             Unload(e.from.vessel, true);
         }
 
-        /// <summary>
-        /// Runs when the EVA is killed.
-        /// </summary>
-        /// <param name="report"></param>
-/*
-        public void OnCrewKilled(EventReport report)
-        {
-            Log.trace("OnCrewKilled()");
-		KerbalRoster boboo = new KerbalRoster(Game.Modes.SANDBOX);	
-		print(boboo[report.sender].name);
-		//MonoBehaviour.print(report.origin);
-		//MonoBehaviour.print(report.origin.vessel);
-            //Unload(report.origin.vessel, true);
-        }
-*/
-        public void VesselDestroyed(Vessel report) {
-            Log.trace("VesselDestroyed()");
-		if (report.isEVA) Unload(report, true);
-        }
+		/// <summary>
+		/// Runs when the EVA is killed.
+		/// </summary>
+		/// <param name="report"></param>
+		public void OnCrewKilled(EventReport report)
+		{
+			Log.trace("OnCrewKilled()");
+			KerbalRoster boboo = new KerbalRoster(Game.Modes.SANDBOX);
+			Log.warn("Kerbal {0} from {1} was killed.", boboo[report.sender].name, report.origin);
+			//MonoBehaviour.print(report.origin);
+			//MonoBehaviour.print(report.origin.vessel);
+			//Unload(report.origin.vessel, true);
+		}
+
+		public void OnCommandSeatInteraction(KerbalEVA kerbal, bool loaded)
+		{
+			Log.trace("OnCommandSeatInteraction()");
+			if (!loaded)
+				Load(kerbal.vessel);
+		}
+
+		public void VesselDestroyed(Vessel report)
+		{
+			Log.trace("VesselDestroyed()");
+			if (report.isEVA) Unload(report, true);
+		}
 
         public void Load(Vessel vessel)
         {

@@ -14,7 +14,6 @@
 */
 using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace EvaFollower
 {
@@ -30,21 +29,22 @@ namespace EvaFollower
 
         private KerbalEVA eva;
 
-        internal EvaFormation formation = new EvaFormation();
-        internal EvaPatrol patrol = new EvaPatrol();
-		internal EvaOrder order = new EvaOrder();
-		internal EvaWanderer wanderer = new EvaWanderer();
+		internal readonly EvaFormation formation = new EvaFormation();
+		internal readonly EvaPatrol patrol = new EvaPatrol();
+		internal readonly EvaOrder order = new EvaOrder();
+		internal readonly EvaWanderer wanderer = new EvaWanderer();
 
 		const float RunMultiplier = 1.75f;
 		const float BoundSpeedMultiplier = 1.25f;
 
-        public void togglePatrolLines() {
-			if (EvaSettings.Instance.displayDebugLines) {
+		public void SetPatrolLinesVisible(bool v)
+		{
+			if (v && EvaSettings.Instance.displayDebugLines) {
 				patrol.GenerateLine ();
 			} else {
 				patrol.Hide ();
 			}
-        }
+		}
 
         public bool IsActive
         {
@@ -78,10 +78,17 @@ namespace EvaFollower
             }
         }
 
-        public bool CanTakeHelmetOff
-        {
-            get { return (FlightGlobals.ActiveVessel.mainBody.bodyName == "Kerbin") && EvaSettings.Instance.displayToggleHelmet; }
-        }
+		public bool CanTakeHelmetOff
+		{
+			get
+			{
+				return
+					EvaSettings.Instance.displayToggleHelmet
+					&&
+					FlightGlobals.ActiveVessel.mainBody.atmosphereContainsOxygen
+				;
+			}
+		}
 
         public KerbalEVA EVA
         {
@@ -119,10 +126,22 @@ namespace EvaFollower
 
         public bool OnALadder { get { return eva.OnALadder; } }
 
+        // NOTE: That's the history:
+        //
+        // Kerbals used to drift a lot since KSP 1.8.0. There's a nasty bug on KSP on Unity2019
+        // where a miriad of tiny spurious forces are injected on the parts on every physics frame.
+        //
+        // I'm guessing they are not clamping the Random generators (perhaps they upgraded the code
+        // from float to doubles, and now that spurius noise became a problem, as the conversion to
+        // float would be doing the clamping by side effect).
+        //
+        // 
+        System.Reflection.MethodInfo removeRBAnchor = null;
 
         public EvaContainer(Guid flightID)
         {
             this.flightID = flightID;
+            this.removeRBAnchor = typeof(KerbalEVA).GetMethod("RemoveRBAnchor", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             this.loaded = false;
         }
 
@@ -200,7 +219,7 @@ namespace EvaFollower
             }
             catch
             {
-                throw new Exception("[EFX] FromSave Failed.");
+                throw new Exception("FromSave Failed.");
             }
         }
 
@@ -281,6 +300,8 @@ namespace EvaFollower
 
         internal void RecoverFromRagdoll()
         {
+            Log.trace("Trying to recover {0} from Ragdoll", this.eva.part.GetInstanceID());
+            this.UnanchorKerbal(eva);
             eva.RecoverFromRagdoll();
         }
 
@@ -310,7 +331,7 @@ namespace EvaFollower
 			}
 
             //Error
-            throw new Exception("[EFX] New Mode Introduced");
+            throw new Exception("New Mode Introduced");
         }
 
         internal void ReleaseLadder()
@@ -363,19 +384,18 @@ namespace EvaFollower
 				speed *= eva.boundSpeed * BoundSpeedMultiplier; //speedup
                 eva.Animate(AnimationState.BoundSpeed);
             }
-
         }
 
         internal void CheckDistance(Vector3d move, float speed, double sqrDist)
         {
             IEvaControlType controlType = null;
 
-            if (mode == Mode.Follow){       controlType = formation;    }
-            else if (mode == Mode.Patrol){  controlType = patrol;       }
-			else if (mode == Mode.Order){   controlType = order;        }
-			else if (mode == Mode.Wander){   controlType = wanderer;    }
+			if (mode == Mode.Follow)		{ controlType = formation; }
+			else if (mode == Mode.Patrol)	{ controlType = patrol; }
+			else if (mode == Mode.Order)	{ controlType = order; }
+			else if (mode == Mode.Wander)	{ controlType = wanderer; }
 
-            if (controlType.CheckDistance(sqrDist))
+			if (controlType.CheckDistance(sqrDist))
             {
                 eva.Animate(AnimationState.Idle);
 
@@ -432,6 +452,7 @@ namespace EvaFollower
 
                     //move
 					if(rigidbody != null){
+                        this.UnanchorKerbal(eva);
 						rigidbody.MovePosition(rigidbody.position + move);
 					}
                 }
@@ -452,6 +473,11 @@ namespace EvaFollower
         }
 
 
+        void UnanchorKerbal(KerbalEVA eva)
+        {
+            if (null != this.removeRBAnchor)
+                this.removeRBAnchor.Invoke(eva,  null);
+        }
 
 
     }

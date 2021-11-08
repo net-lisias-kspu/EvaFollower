@@ -13,7 +13,6 @@
 
 */
 using System;
-using System.Xml;
 
 namespace EvaFollower
 {
@@ -107,7 +106,7 @@ namespace EvaFollower
             }
             catch
             {
-                throw new Exception("[EFX] Formation.FromSave Failed.");
+                throw new Exception("Formation.FromSave Failed.");
             }  
         }
     }

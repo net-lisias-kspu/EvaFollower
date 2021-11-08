@@ -12,7 +12,6 @@
 	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 */
-using System;
 namespace EvaFollower
 {
 	internal static class Const

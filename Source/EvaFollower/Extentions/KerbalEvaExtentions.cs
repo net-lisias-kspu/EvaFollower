@@ -12,9 +12,6 @@
 	warranty of	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace EvaFollower
@@ -30,7 +27,7 @@ namespace EvaFollower
         /// <param name="eva"></param>
         /// <param name="showHelmet"></param>
         public static void ShowHelmet(this KerbalEVA eva,bool showHelmet)
-        {             
+        {
             foreach (Renderer renderer in eva.GetComponentsInChildren<Renderer>())
             {
                 SkinnedMeshRenderer smr = renderer as SkinnedMeshRenderer;
@@ -139,34 +136,27 @@ namespace EvaFollower
             catch { }
         }
 
-        public static void RecoverFromRagdoll(this KerbalEVA eva)
-        {
+		public static void RecoverFromRagdoll(this KerbalEVA eva)
+		{
 			Rigidbody rigidbody = null;
 			eva.GetComponentCached<Rigidbody> (ref rigidbody);
-			if (rigidbody != null) {
-				if (rigidbody.isKinematic)
-					return;
-			}
+			if (null != rigidbody && rigidbody.isKinematic) return;
+			if (!eva.isEnabled) return;
 
-            if (!eva.isEnabled)
-                return;
+			// Much Kudos to Razchek for finally slaying the Ragdoll Monster!
+			// However, this is not working everytime on newer KSPs (detected on KSP 1.12.2 at least)
+			// **Aparently**, when the Kerbal "stumbles", the state is not ragdoll and, so, this doesn't
+			// recovers from it - besides eva.IsRagDoll being true!
+			// A little tap on a movement key solves the issue, however.
+			if (eva.canRecover && eva.fsm.TimeAtCurrentState > 1.21f && !eva.part.GroundContact)
+				foreach (KFSMEvent stateEvent in eva.fsm.CurrentState.StateEvents) if ("Recover Start" == stateEvent.name)
+				{
+					eva.fsm.RunEvent(stateEvent);
+					break;
+				}
+		}
 
-            //Much Kudos to Razchek for finally slaying the Ragdoll Monster!
-            if (eva.canRecover && eva.fsm.TimeAtCurrentState > 1.21f && !eva.part.GroundContact)
-            {
-                foreach (KFSMEvent stateEvent in eva.fsm.CurrentState.StateEvents)
-                {
-                    if (stateEvent.name == "Recover Start")
-                    {
-                        eva.fsm.RunEvent(stateEvent);
-                        break;
-                    }
-                }
-
-            }
-        }
-
-        public static void Animate(this KerbalEVA eva, AnimationState state)
+		public static void Animate(this KerbalEVA eva, AnimationState state)
         {
             string anim = "Idle";
 

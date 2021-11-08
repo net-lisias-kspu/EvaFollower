@@ -14,21 +14,22 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using System.Diagnostics;
+using KSPe.Annotations;
 
 namespace EvaFollower
 {
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     class EvaOrderController : MonoBehaviour
     {
+        internal static EvaOrderController Instance { get; private set; }
+
         private Dictionary<Guid, LineRenderer> selectionLines = new Dictionary<Guid, LineRenderer>();
         private LineRenderer _cursor = new LineRenderer();
 
         //Selection variables
-        private bool gameUIToggle = true;
-        private Texture2D _selectionHighlight = new Texture2D(200, 200);
+        internal bool gameUiVisible { get; private set; }
+        private readonly Texture2D _selectionHighlight = new Texture2D(200, 200);
         private Rect _selection = new Rect(0, 0, 0, 0);
         private Vector3 _startClick = -Vector3.one;
 
@@ -45,7 +46,12 @@ namespace EvaFollower
         //animation variable
         private double angle = 0;
 
-        
+        [UsedImplicitly]
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         public void Start()
         {
             Log.trace("EvaOrderController.Start()");
@@ -60,11 +66,17 @@ namespace EvaFollower
             }
 
             InitializeCursor();
+            GameEvents.onShowUI.Add(this.GameUIEnable);
+            GameEvents.onHideUI.Add(this.GameUIDisable);
         }
+
         public void OnDestroy()
         {
             Log.trace("EvaOrderController.OnDestroy()");
+            GameEvents.onHideUI.Remove(this.GameUIDisable);
+            GameEvents.onShowUI.Remove(this.GameUIEnable);
             EvaSettings.Instance.Destroy();
+            Instance = null;
         }
 
         private void InitializeCursor()
@@ -183,10 +195,7 @@ namespace EvaFollower
         /// <param name="eva"></param>
         private void CreateLine(EvaContainer container)
         {
-            if (selectionLines.ContainsKey(container.flightID))
-            {
-                return;
-            }
+            if (selectionLines.ContainsKey(container.flightID)) return;
 
             LineRenderer lineRenderer = new GameObject().AddComponent<LineRenderer>();
 
@@ -213,7 +222,6 @@ namespace EvaFollower
             SetSelectionLineProperties(container.EVA, lineRenderer);
 
             selectionLines.Add(container.flightID, lineRenderer);
-
         }
 
         /// <summary>
@@ -222,11 +230,10 @@ namespace EvaFollower
         /// <param name="eva"></param>
         private void DestroyLine(Guid flightID)
         {
-            if (selectionLines.ContainsKey(flightID))
-            {
-                Destroy(selectionLines[flightID]);//destroy object
-                selectionLines.Remove(flightID); // and throw away the key.
-            }
+            if (!selectionLines.ContainsKey(flightID)) return;
+
+            Destroy(selectionLines[flightID]);//destroy object
+            selectionLines.Remove(flightID); // and throw away the key.
         }
 
 
@@ -256,36 +263,36 @@ namespace EvaFollower
             _animatedCursorValue = 0;
         }
 
-        /// <summary>
-        /// Draw the selection box.
-        /// </summary>
-        private void OnGUI()
-        {
-            if (gameUIToggle)
-            {
-                bool visibleBox = _selection.width != 0 && _selection.height != 0;
-                bool noWindow = GUIUtility.hotControl == 0;
-					
+		/// <summary>
+		/// Draw the selection box.
+		/// </summary>
+		private void OnGUI()
+		{
+			if (!this.gameUiVisible) return;
+
+			{
+				bool visibleBox = _selection.width != 0 && _selection.height != 0;
+				bool noWindow = GUIUtility.hotControl == 0;
 				if (_startClick != -Vector3.one && visibleBox && noWindow)
-                {
-                    GUI.color = new Color(1, 1, 1, 0.15f);
-                    GUI.DrawTexture(_selection, _selectionHighlight);
-                }
-            }
-        }
+				{
+					GUI.color = new Color(1, 1, 1, 0.15f);
+					GUI.DrawTexture(_selection, _selectionHighlight);
+				}
+			}
+		}
 
-        void GameUIEnable()
-        {
-            gameUIToggle = true;
-        }
+		void GameUIEnable()
+		{
+			this.gameUiVisible = true;
+		}
 
-        void GameUIDisable()
-        {
-            gameUIToggle = false;
-        }
+		void GameUIDisable()
+		{
+			this.gameUiVisible = false;
+		}
 
 
-        public void Update()
+		public void Update()
         {
             if (!FlightGlobals.ready || PauseMenu.isOpen)
                 return;
@@ -461,7 +468,6 @@ namespace EvaFollower
                 }
                 #endregion
 
-                              
 
                 #region Select Single Kerbal
 
@@ -494,7 +500,7 @@ namespace EvaFollower
 
                         if (!eva.Loaded)
                         {
-                            throw new Exception("[EFX] Impossibre!");
+                            throw new Exception("Impossibre!");
                         }
 
                         SelectEva(eva);

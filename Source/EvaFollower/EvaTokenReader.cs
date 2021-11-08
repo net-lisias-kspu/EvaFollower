@@ -13,9 +13,6 @@
 
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace EvaFollower
 {
@@ -150,7 +147,7 @@ namespace EvaFollower
 
         private void ParseException(char found, char expected)
         {
-            throw new Exception("[EFX] ParseException: Expected: \'" + expected + "\'. Found:" + found);
+            throw new Exception("ParseException: Expected: \'" + expected + "\'. Found:" + found);
         }
 
         internal void Consume()
