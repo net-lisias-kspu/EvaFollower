@@ -211,7 +211,7 @@ namespace EvaFollower
                 lineRenderer = new GameObject().AddComponent<LineRenderer>();
 
                 lineRenderer.useWorldSpace = false;
-                lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+                lineRenderer.material = new Material(Shader.Find(Const.SHADER_PARTICLE_ADDITIVE));
                 lineRenderer.SetWidth(0.05f, 0.05f);
                 lineRenderer.SetColors(Color.green, Color.red);
 

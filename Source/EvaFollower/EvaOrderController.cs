@@ -72,7 +72,7 @@ namespace EvaFollower
             _cursor = new GameObject().AddComponent<LineRenderer>();
 
             _cursor.useWorldSpace = false;
-            _cursor.material = new Material(Shader.Find("Particles/Additive"));
+            _cursor.material = new Material(Shader.Find(Const.SHADER_PARTICLE_ADDITIVE));
             _cursor.SetWidth(0.05f, 0.05f);
             _cursor.SetColors(Color.green, Color.green);
 
@@ -191,7 +191,7 @@ namespace EvaFollower
             LineRenderer lineRenderer = new GameObject().AddComponent<LineRenderer>();
 
             lineRenderer.useWorldSpace = false;
-            lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+            lineRenderer.material = new Material(Shader.Find(Const.SHADER_PARTICLE_ADDITIVE));
             lineRenderer.SetWidth(0.05f, 0.05f);
             lineRenderer.SetColors(Color.green, Color.red);
 
@@ -630,7 +630,7 @@ namespace EvaFollower
             debugLine = new GameObject().AddComponent<LineRenderer>();
 
             debugLine.useWorldSpace = false;
-            debugLine.material = new Material(Shader.Find("Particles/Additive"));
+            debugLine.material = new Material(Shader.Find(Const.SHADER_PARTICLE_ADDITIVE));
             debugLine.SetWidth(0.05f, 0.05f);
             debugLine.SetColors(Color.green, Color.red);
 
