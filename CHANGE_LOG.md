@@ -1,5 +1,13 @@
 # EVA Follower /L Unleashed :: Change Log
 
+* 2013-0725: Release 0.12 (Fel) for KSP 0.20.2
+	+ Much Kudos to Razchek for finally slaying the Ragdoll Monster!
+	+ I believe the rotation issues are 'almost fixed', they no longer walk on their sides while at the poles of the mun.
+	+ Various 'animation related' bug fixes, (mostly, needing to reset the animation state)
+	+ Tried to annotate the source a little more.
+	+ Added a 'tighten up' box that should show up on only the followers, which makes small groups (I'd say 5 most) maintain some semblence of a formation better than the default;
+	+ I need to add in some kind of "boxed bounds" which will make the final push to keep kerbals in line.
+		- (It's like putting marbles in a small box, enough to fill it and they'll stay put as long as you don't shake it).
 * 2013-07??: Release 0.11.3 (Fel) for KSP 0.20.2 NO BINARIES
 	+ Okay, that SHOULD fix the bug. There SHOULD NOT be any freezing...
 Kerbals face the player when "follow me" is clicked, even if fairly close (would like some kind of "wave" too)
