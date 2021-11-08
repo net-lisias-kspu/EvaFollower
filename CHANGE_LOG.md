@@ -1,5 +1,7 @@
 # EVA Follower /L Unleashed :: Change Log
 
+* 2014-0916: Release ? (MSD) for KSP 0.24.2
+	+ No changelog provided 
 * 2013-0725: Release 0.12 (Fel) for KSP 0.20.2
 	+ Much Kudos to Razchek for finally slaying the Ragdoll Monster!
 	+ I believe the rotation issues are 'almost fixed', they no longer walk on their sides while at the poles of the mun.
