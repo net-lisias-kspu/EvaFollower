@@ -1,5 +1,7 @@
 # EVA Follower /L Unleashed :: Change Log
 
+* 2016-0520: Release 1.0.35 (MSD) for KSP 1.1.2
+	+ Compatability for release 1.1.2
 * 2016-0424: Release 1.0.33 (MSD) for KSP 1.1
 	+ Compatability for release 1.1 
 * 2014-0916: Release ? (MSD) for KSP 0.24.2
