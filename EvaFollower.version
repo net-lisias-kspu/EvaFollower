@@ -1,13 +1,13 @@
 {
 	"NAME"		: "EVA Follower /L Unleashed",
-	"URL"		: "https://raw.githubusercontent.com/net-lisias-ksp<u>/EvaFollower/master/EvaFollower.version",
-	"DOWNLOAD"	: "https://github.com/net-lisias-ksp<u>/EvaFollower/releases",
-	"CHANGE_LOG"	: "https://raw.githubusercontent.com/net-lisias-ksp<u>/EvaFollower/master/CHANGE_LOG.md",
-	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-ksp<u>/EvaFollower/master/CHANGES.md",
+	"URL"		: "https://raw.githubusercontent.com/net-lisias-kspu/EvaFollower/master/EvaFollower.version",
+	"DOWNLOAD"	: "https://github.com/net-lisias-kspu/EvaFollower/releases",
+	"CHANGE_LOG"	: "https://raw.githubusercontent.com/net-lisias-kspu/EvaFollower/master/CHANGE_LOG.md",
+	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-kspu/EvaFollower/master/CHANGES.md",
 	"VERSION":{
 		"MAJOR":1,
-		"MINOR":0,
-		"PATCH":35,
+		"MINOR":2,
+		"PATCH":0,
 		"BUILD":0
 		},
 	"KSP_VERSION_MIN":{
