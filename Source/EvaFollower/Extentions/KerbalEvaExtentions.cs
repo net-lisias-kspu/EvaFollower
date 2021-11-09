@@ -144,10 +144,16 @@ namespace EvaFollower
 			if (!eva.isEnabled) return;
 
 			// Much Kudos to Razchek for finally slaying the Ragdoll Monster!
+			//
 			// However, this is not working everytime on newer KSPs (detected on KSP 1.12.2 at least)
 			// **Aparently**, when the Kerbal "stumbles", the state is not ragdoll and, so, this doesn't
 			// recovers from it - besides eva.IsRagDoll being true!
+			//
 			// A little tap on a movement key solves the issue, however.
+			//
+			// Additionally, and interestingly, this unrecoverable ragdoll situation only happens when
+			// the Kerbal that stumbles has de focus!! By switching vessels, it recovers, so perhaps this
+			// is something I can tackle down on code!
 			if (eva.canRecover && eva.fsm.TimeAtCurrentState > 1.21f && !eva.part.GroundContact)
 				foreach (KFSMEvent stateEvent in eva.fsm.CurrentState.StateEvents) if ("Recover Start" == stateEvent.name)
 				{

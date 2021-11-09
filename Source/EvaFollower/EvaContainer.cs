@@ -135,7 +135,9 @@ namespace EvaFollower
         // from float to doubles, and now that spurius noise became a problem, as the conversion to
         // float would be doing the clamping by side effect).
         //
-        // 
+        // In a way or another, Squad choose to implement an Anchor for the vessels (including Kerbals),
+        // and you need to unanchor it before moving it. However, the method that does the job is private,
+        // and using it hurts the Forum rules for add'ons. Catch-22 situation (I wonder it's on purpose?)
         System.Reflection.MethodInfo removeRBAnchor = null;
 
         public EvaContainer(Guid flightID)
