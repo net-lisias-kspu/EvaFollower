@@ -28,6 +28,10 @@ namespace EvaFollower
 			,"kerbalEVAVintage", "kerbalEVAfemaleVintage"
 			,"kerbalEVAFuture", "kerbalEVAFemaleFuture"
 			,"kerbalEVASlimSuit", "kerbalEVASlimSuitFemale"
+			,"maleEVA", "femaleEVA"
+			,"kerbalEVA_RD_Exp", "kerbalEVA_female_Exp"
+ 			,"kerbalEVA_RD_Future", "kerbalEVA_female_Future", "kerbalEVAfemaleFuture"
+
 		};
 
 		public void Awake()
