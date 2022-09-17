@@ -50,7 +50,7 @@ namespace EvaFollower
 		{
 			Log.trace("EvaController.OnDestroy()");
 
-			GameEvents.onVesselWillDestroy.Add(this.VesselDestroyed);
+			GameEvents.onVesselWillDestroy.Remove(this.VesselDestroyed);
 
 			GameEvents.onGameStateSave.Remove(this.OnSave);
 			GameEvents.onFlightReady.Remove(this.OnFlightReadyCallback);

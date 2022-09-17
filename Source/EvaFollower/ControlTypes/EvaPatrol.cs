@@ -123,7 +123,7 @@ namespace EvaFollower
 		public string ToSave()
         {
             string actionList = "{";
-            for (int i = 0; i < actions.Count; i++)
+            for (int i = 0; i < actions.Count-1; i++)
 			{
                 actionList += actions[i].ToSave();
 			}
