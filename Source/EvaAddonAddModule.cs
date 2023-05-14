@@ -26,6 +26,12 @@ namespace MSD.EvaFollower
               "kerbalEVAfemaleFuture",
               "maleEVA",
               "femaleEVA",
+
+              "kerbalEVASlimSuitFemale",
+              "kerbalEVASlimSuit",
+              "kerbalEVAFuture",
+              "kerbalFemaleFuture",
+
             };
 
             foreach (var part in parts)

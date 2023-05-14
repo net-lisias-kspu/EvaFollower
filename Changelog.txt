@@ -1,5 +1,8 @@
 Changelog
 
+1.1.2
+	Added kerbalEVASlimSuitFemale, kerbalEVASlimSuit, kerbalEVAFuture, kerbalFemaleFuture
+
 1.1.1.14 
 	Fixed small memory leak
 
