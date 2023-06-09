@@ -1,5 +1,8 @@
 # EVA Follower /L Unleashed :: Change Log
 
+* 2023-0609: Release 1.2.0.2 (LisiasT) for KSP >= 1.3.1
+	+ Updating KSPe support to 2.5
+	+ No other changes applied. 
 * 2022-0917: Release 1.2.0.1 (LisiasT) for KSP >= 1.3.1
 	+ Updates to the last KSPe version (2.4.2.x).
 	+ Fixes some small code mishaps
