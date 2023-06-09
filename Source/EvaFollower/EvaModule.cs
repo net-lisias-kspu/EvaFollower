@@ -22,7 +22,7 @@ namespace EvaFollower
     {
         private EvaContainer currentContainer;
         private readonly bool IsNativeHelmetSupport = KSPe.Util.KSP.Version.Current >= KSPe.Util.KSP.Version.FindByVersion(1,6,0);
-        private readonly bool IsKisInstalled = KSPe.Util.SystemTools.Type.Finder.ExistsByQualifiedName("KISAPIv1.KISAPI");
+        private readonly bool IsKisInstalled = KSPe.Util.SystemTools.Type.Exists.ByQualifiedName("KISAPIv1.KISAPI");
 
         public void Update()
         {
