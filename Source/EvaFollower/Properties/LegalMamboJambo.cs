@@ -1,6 +1,6 @@
 ﻿/*
 	This file is part of EVA Follower /L Unleashed
-		© 2021-2022 Lisias T : http://lisias.net <support@lisias.net>
+		© 2021-2023 Lisias T : http://lisias.net <support@lisias.net>
 		© 2014-2016 Marijn Stevens (MSD)
 		© 2013 Fel
 
@@ -18,7 +18,7 @@ namespace EvaFollower
 	public static class LegalMamboJambo
 	{
 		public const string Company = "/L Aerospace KSP Division";
-		public const string Copyright = "© 2021-2022 LisiasT";
+		public const string Copyright = "© 2021-2023 LisiasT";
 		public const string Product = "EvaFollower";
 		public const string Trademark = "EvaFollower™ by Sir Fel, MSD; /L Unleashed™ by LisiasT";
 	}

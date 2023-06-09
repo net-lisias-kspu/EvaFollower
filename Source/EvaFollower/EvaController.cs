@@ -1,6 +1,6 @@
 ﻿/*
 	This file is part of EVA Follower /L Unleashed
-		© 2021-2022 Lisias T : http://lisias.net <support@lisias.net>
+		© 2021-2023 Lisias T : http://lisias.net <support@lisias.net>
 		© 2014-2016 Marijn Stevens (MSD)
 		© 2013 Fel
 
