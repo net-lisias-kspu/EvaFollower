@@ -16,11 +16,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using KSPe.Annotations;
+using IO = KSPe.IO;
 
 namespace EvaFollower
 {
     [KSPAddon(KSPAddon.Startup.Flight, false)]
-    class EvaOrderController : MonoBehaviour
+    class EvaOrderController : MonoBehaviour, IO.SaveGameMonitor.SaveGameLoadedListener
     {
         internal static EvaOrderController Instance { get; private set; }
 
@@ -56,9 +57,13 @@ namespace EvaFollower
         {
             Log.trace("EvaOrderController.Start()");
 
-            //save config.
-            //EvaSettings.SaveConfiguration();
-            EvaSettings.Instance.LoadConfiguration();
+			//save config.
+			//EvaSettings.SaveConfiguration();
+            // Better safer than sorry. There're Add'Ons that load a SaveGame directly into FlightMode.
+			if (IO.SaveGameMonitor.Instance.IsValid)
+				EvaSettings.Instance.LoadConfiguration();
+			else
+				IO.SaveGameMonitor.Instance.AddSingleShot(this);
 
             if (EvaSettings.Instance.displayDebugLines)
             {
@@ -78,6 +83,14 @@ namespace EvaFollower
             EvaSettings.Instance.Destroy();
             Instance = null;
         }
+
+		void IO.SaveGameMonitor.SaveGameLoadedListener.OnSaveGameLoaded(string name)
+		{
+			Log.dbg("OnSaveGameLoaded({0})", name);
+			EvaSettings.Instance.LoadConfiguration();
+		}
+
+		void IO.SaveGameMonitor.SaveGameLoadedListener.OnSaveGameClosed() { }
 
         private void InitializeCursor()
         {
@@ -651,7 +664,5 @@ namespace EvaFollower
 
             debugLine.SetVertexCount(0);
         }
-
-
-    }
+	}
 }
