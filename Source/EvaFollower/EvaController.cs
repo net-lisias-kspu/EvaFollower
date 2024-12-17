@@ -135,12 +135,15 @@ namespace EvaFollower
 		/// <param name="report"></param>
 		public void OnCrewKilled(EventReport report)
 		{
-			Log.trace("OnCrewKilled()");
-			KerbalRoster boboo = new KerbalRoster(Game.Modes.SANDBOX);
-			Log.warn("Kerbal {0} from {1} was killed.", boboo[report.sender].name, report.origin);
-			//MonoBehaviour.print(report.origin);
-			//MonoBehaviour.print(report.origin.vessel);
-			//Unload(report.origin.vessel, true);
+			Log.trace("OnCrewKilled({0})", report);
+			KerbalRoster boboo = HighLogic.fetch.currentGame.CrewRoster;
+			if (null != boboo[report.sender])
+			{
+				Log.detail("Kerbal {0} from {1} was killed.", boboo[report.sender].name, report.origin);
+				//Unload(report.origin.vessel, true);
+			}
+			else
+				Log.err("Kerbal {0} not found in game's Roster!", report.sender);
 		}
 
 		public void OnCommandSeatInteraction(KerbalEVA kerbal, bool loaded)
