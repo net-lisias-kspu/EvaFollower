@@ -20,11 +20,12 @@ using KSPe;
 using Asset = KSPe.IO.Asset<EvaFollower.Startup>;
 using Savegame = KSPe.IO.Save<EvaFollower.Startup>;
 using File = KSPe.IO.File<EvaFollower.Startup>.Save;
+using SGM = KSPe.IO.SaveGameMonitor;
 using SIO = System.IO;
 
 namespace EvaFollower
 {
-    class EvaSettings
+    class EvaSettings : SGM.SaveGameLoadedListener
     {
         private static EvaSettings instance = null;
         internal static EvaSettings Instance => instance ?? (instance = new EvaSettings());
@@ -52,7 +53,11 @@ namespace EvaFollower
 		}
 
 		private readonly Asset.ConfigNode DEFAULTS = Asset.ConfigNode.For("EvaFollower", "Config.cfg");
-        private readonly Savegame.ConfigNode SAVE = Savegame.ConfigNode.For("EvaFollower", "Config.cfg");
+
+		// By the time `save` is needed, it's sure that a savegame is valid, so there's no need for the KSPe's SaveGameMonitor shenanignans.
+		private Savegame.ConfigNode _SAVE = null;
+        private Savegame.ConfigNode SAVE => _SAVE??(_SAVE=Savegame.ConfigNode.For("EvaFollower", "Config.cfg"));
+
         public void LoadConfiguration()
         {
             if (!SAVE.IsLoadable)
@@ -174,8 +179,28 @@ namespace EvaFollower
         }
 
         private const string EVA_FILENAME = "Evas.txt";
-        private void LoadFile()
+		private bool isLoadNeeded = false;
+		private bool isSaveNeeded = false;
+		void SGM.SaveGameLoadedListener.OnSaveGameLoaded(string name)
+		{
+			if (this.isLoadNeeded) this.LoadFileThisTime();
+			if (this.isSaveNeeded) this.SaveFileThisTime();
+		}
+
+		void SGM.SaveGameLoadedListener.OnSaveGameClosed() { }
+		private void LoadFile()
+		{
+			if (SGM.Instance.IsValid) this.LoadFileThisTime();
+			else
+			{
+				this.isLoadNeeded = true;
+				SGM.Instance.AddSingleShot(this);
+			}
+		}
+
+        private void LoadFileThisTime()
         {
+            this.isLoadNeeded = false;
             if (File.Exists(EVA_FILENAME))
             {
 				SIO.TextReader tr = Savegame.StreamReader.CreateFor(EVA_FILENAME);
@@ -213,8 +238,19 @@ namespace EvaFollower
         }
 
 
-        private void SaveFile()
+		private void SaveFile()
+		{
+			if (SGM.Instance.IsValid) this.SaveFileThisTime();
+			else
+			{
+				this.isLoadNeeded = true;
+				SGM.Instance.AddSingleShot(this);
+			}
+		}
+
+        private void SaveFileThisTime()
         {
+            this.isSaveNeeded = false;
 			SIO.TextWriter tw = Savegame.StreamWriter.CreateFor(EVA_FILENAME);
 
             foreach (KeyValuePair<Guid, string> item in collection)
@@ -225,5 +261,5 @@ namespace EvaFollower
             collection.Clear();
 			this.isLoaded = false;
         }
-    }
+	}
 }
